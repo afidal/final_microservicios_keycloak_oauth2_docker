@@ -1,0 +1,59 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: facturacion-service
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    driverClassName: org.h2.Driver
+    username: sa
+    password: sa
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+    open-in-view: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuerUri: ${KEYCLOAK_URL:http://localhost:8082/}realms/${app.realm}
+            tokenUri: ${KEYCLOAK_URL:http://localhost:8082/}realms/${app.realm}/protocol/openid-connect/token
+        registration:
+          keycloak:
+            client-id: internal
+            client-secret: n6zj3uohT8GweySdOdyx8I34x7Ktvm1W
+            authorization-grant-type: client_credentials
+            scope: openid
+            redirect-uri: http://localhost:8088
+
+app:
+  realm: DigitalMedia
+
+eureka:
+  client:
+    service-url:
+      #defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+
+info:
+  app:
+    name: ${spring.application.name}
+    version: 1.0.0
+    description: Facturacion Service Proyecto Integrador Especialización Backend II
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

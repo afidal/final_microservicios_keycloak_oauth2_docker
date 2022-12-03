@@ -1,0 +1,80 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: usuarios-service
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: ${KEYCLOAK_URL:http://localhost:8082/}realms/${app.realm}
+        registration:
+          keycloak:
+            client-id: microservicios
+            client-secret: 2zjJjakYyx6WrLT4hxSZLnutBwk9M6Ci
+            scope: openid
+            redirect-uri: http://localhost:8087
+  data:
+    mongodb:
+#      database: tp_integrador
+#      port: 27017
+#      host: localhost
+       authentication-database: admin
+       username: rootuser
+       password: rootpass
+       database: tp_integrador
+       port: 27017
+       host: mongodb
+  main:
+    allow-circular-references: true
+
+springdoc:
+  show-actuator: true
+  swagger-ui:
+    groups-order: DESC
+    disable-swagger-default-url: true
+
+management:
+  endpoints:
+    web:
+      exposure.include: "*"
+  endpoint:
+    health:
+      show-details: always
+    info:
+      enabled: true
+  info:
+    env:
+      enabled: true
+
+app:
+  realm: DigitalMedia
+  cors:
+    allowed-origins: http://localhost:3000
+
+afidal:
+  keycloak:
+    serverUrl: ${KEYCLOAK_URL:http://localhost:8082/}
+    realm: ${app.realm}
+    clientId: microservicios
+    clientSecret: 2zjJjakYyx6WrLT4hxSZLnutBwk9M6Ci
+
+eureka:
+  client:
+    service-url:
+      #defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+
+info:
+  app:
+    name: ${spring.application.name}
+    version: 1.0.0
+    description: Usuarios Service Proyecto Integrador Especialización Backend II
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
