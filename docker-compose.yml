@@ -13,6 +13,8 @@ services:
     volumes:
       #- db:/var/lib/postgresql/data
       - ./db/postgres-data:/var/lib/postgresql/data
+    networks:
+      - local_network
   keycloak:
     depends_on:
       - postgres
@@ -30,6 +32,8 @@ services:
     ports:
       - "8082:8080"
     restart: unless-stopped
+    networks:
+      - local_network
   eureka-server:
     container_name: eureka-server
     depends_on:
@@ -38,6 +42,8 @@ services:
     ports:
       - "8761:8761"
     restart: always
+    networks:
+      - local_network
   gateway-service:
     container_name: gateway-service
     depends_on:
@@ -49,6 +55,8 @@ services:
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka
       KEYCLOAK_URL: http://keycloak:8080/
+    networks:
+      - local_network
   peliculas-service:
     container_name: peliculas-service
     depends_on:
@@ -60,6 +68,8 @@ services:
     environment:
        EUREKA_URL: http://eureka-server:8761/eureka
        KEYCLOAK_URL: http://keycloak:8080/
+    networks:
+      - local_network
   facturacion-service:
     container_name: facturacion-service
     depends_on:
@@ -71,6 +81,8 @@ services:
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka
       KEYCLOAK_URL: http://keycloak:8080/
+    networks:
+      - local_network
   usuarios-service:
     container_name: usuarios-service
     depends_on:
@@ -82,6 +94,8 @@ services:
     environment:
        EUREKA_URL: http://eureka-server:8761/eureka
        KEYCLOAK_URL: http://keycloak:8080/
+    networks:
+      - local_network
   mongodb:
     image: mongo
     container_name: "mongodb"
@@ -92,9 +106,11 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=rootpass
     ports:
       - "27017:27017"
+    networks:
+      - local_network
 
 networks:
-  local-keycloak: {}
+  local_network: {}
 
 volumes:
   db:
